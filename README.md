@@ -1,69 +1,22 @@
-# Data-Science-project
-
-#Data Science Project
-#Dataset chosen = Ebola
-
-#Importing the libraries
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-
-#Importing the Dataset
-dataset = pd.read_csv('2014_ebola_CF_labeled_data.tsv', delimiter = '\t', quoting = 3)
-
-# Cleaning the texts
-import re
-import nltk
-nltk.download('stopwords')
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
-corpus = []
-for i in range(0, 1774):
-    review = re.sub('[^a-zA-Z]', ' ', dataset['tweet_text'][i])
-    review = review.lower()
-    review = review.split()
-    ps = PorterStemmer()
-    review = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]
-    review = ' '.join(review)
-    corpus.append(review)
-    
-# Creating the Bag of Words model
-from sklearn.feature_extraction.text import CountVectorizer
-cv = CountVectorizer(max_features = 5900)
-X = cv.fit_transform(corpus).toarray()
-y = dataset.iloc[:, 2].values
-
-# Encoding categorical data
-from sklearn.preprocessing import LabelEncoder
-# Encoding the Dependent Variable
-labelencoder_y = LabelEncoder()
-y = labelencoder_y.fit_transform(y)
-
-# Splitting the dataset into the Training set and Test set
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 0)
+Abstract
 
 
-# Fitting Naive Bayes to the Training
-from sklearn.naive_bayes import GaussianNB
-classifier = GaussianNB()
-classifier.fit(X_train, y_train)
+During a new disease outbreak, frustration and uncertainties among affected and vulnerable population increase. Affected
+communities look for known symptoms, prevention measures, and treatment strategies. On the other hand, health
+organizations try to get situational updates to assess the severity of the outbreak, known affected cases, and other details.
+Recent emergence of social media platforms such as Twitter provide convenient ways and fast access to disseminate
+and consume information to/from a wider audience. Research studies have shown potential of this online information to
+address information needs of concerned authorities during outbreaks, epidemics, and pandemics. In this work, we target
+three types of end-users (i) vulnerable population—people who are not yet affected and are looking for prevention related
+information (ii) affected population—people who are affected and looking for treatment related information, and (iii) health
+organizations—like WHO, who are interested in gaining situational awareness to make timely decisions. We use Twitter
+data from two recent outbreaks (Ebola and MERS) to build an automatic classification approach useful to categorize
+tweets into different disease related categories. Moreover, the classified messages are used to generate different kinds of
+summaries useful for affected and vulnerable communities as well as health organizations. Results obtained from extensive
+experimentation show the effectiveness of the proposed approach.
 
 
-# Fitting Decision Tree Classification to the Training set
-from sklearn.tree import DecisionTreeClassifier
-classifier = DecisionTreeClassifier(criterion = 'entropy', random_state = 0)
-classifier.fit(X_train, y_train)
+Note: Coomand to upload file in colab
 
-
-# Fitting Random Forest Classification to the Training set
-from sklearn.ensemble import RandomForestClassifier
-classifier = RandomForestClassifier(n_estimators = 1000, criterion = 'entropy', random_state = 0)
-classifier.fit(X_train, y_train)
-
-# Predicting the Test set results
-y_pred = classifier.predict(X_test)
-
-# Making the Confusion Matrix
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(y_test, y_pred) 
+from google.colab import files
+uploaded = files.upload()
